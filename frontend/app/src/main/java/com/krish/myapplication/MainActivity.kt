@@ -6,14 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.krish.myapplication.navigation.SetupNavGraph
+import androidx.compose.ui.tooling.preview.Preview
 import com.krish.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,10 +22,22 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    navController = rememberNavController()
-                    SetupNavGraph(navController = navController)
+                    Greeting("Android")
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyApplicationTheme {
+        Greeting("Android")
     }
 }
