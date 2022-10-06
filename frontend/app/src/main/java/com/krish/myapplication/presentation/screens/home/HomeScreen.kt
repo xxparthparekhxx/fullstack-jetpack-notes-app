@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.krish.myapplication.data.model.Note
+import com.krish.myapplication.navigation.Screen
 
 private val noteList = mutableListOf(
     Note(1,"Krish","Parekh","High"),
@@ -42,7 +43,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.primary,
-                onClick = { navController.navigateUp() }
+                onClick = { navController.navigate(Screen.Add.route) }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
