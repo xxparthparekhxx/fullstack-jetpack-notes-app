@@ -11,14 +11,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.krish.myapplication.data.model.Note
 
 @Composable
 fun AddScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    addScreenViewModel: AddScreenViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+    var title by remember { mutableStateOf(TextFieldValue("")) }
+    var body by remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -42,7 +47,16 @@ fun AddScreen(
         floatingActionButton = {
             FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.primary,
-                onClick = { navController.navigateUp() }
+                onClick = {
+                    val note = Note(
+                        id = 0,
+                        title = title.text,
+                        description = body.text,
+                        priority = "High"
+                    )
+                    addScreenViewModel.insertNote(note = note)
+                    navController.navigateUp()
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
@@ -57,8 +71,6 @@ fun AddScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            var title by remember { mutableStateOf(TextFieldValue("")) }
-            var body by remember { mutableStateOf(TextFieldValue("")) }
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Enter Title") },
@@ -67,10 +79,12 @@ fun AddScreen(
                     title = it
                 }
             )
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .size(12.dp)
-                .padding(paddingValues))
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(12.dp)
+                    .padding(paddingValues)
+            )
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxSize(),

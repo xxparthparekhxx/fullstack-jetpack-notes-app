@@ -8,27 +8,25 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.krish.myapplication.data.model.Note
 import com.krish.myapplication.navigation.Screen
 
-private val noteList = mutableListOf(
-    Note(1,"Krish","Parekh","High"),
-    Note(1,"Parth","Parekh is brother","Low"),
-    Note(1,"Hiren","Parekh is father","Medium"),
-    Note(1,"Binal","Parekh is mother","High"),
-)
 
 @Composable
 fun HomeScreen(
-    navController : NavHostController
+    navController : NavHostController,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
+    val noteList = homeViewModel.getAllNotes.collectAsState(initial = emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,7 +57,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ){
-            items(noteList){ note: Note ->
+            items(noteList.value){ note: Note ->
                 NoteCard(note = note)
             }
         }
@@ -69,7 +67,9 @@ fun HomeScreen(
 @Composable
 fun NoteCard(note : Note) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         elevation = 10.dp
     ) {
         Column(
